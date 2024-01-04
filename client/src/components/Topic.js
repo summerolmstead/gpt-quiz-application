@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Message = () => {
+const Topic = () => {
     const [message, setMessage] = useState("");
     const [resp, setResp] = useState("");
 
@@ -50,4 +50,4 @@ const Message = () => {
     );
 };
 
-export default Message;
+export default Topic;

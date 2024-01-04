@@ -1,15 +1,15 @@
 import React from "react";
 import "./App.css";
 
-import Message from "./components/Message";
 import Header from "./components/Header";
+import Quiz from "./components/Quiz";
 
 function App() {
     return (
         <div className="App">
             <Header />
             <div className="main">
-                <Message />
+                <Quiz />
             </div>
         </div>
     );
