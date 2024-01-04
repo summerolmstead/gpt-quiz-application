@@ -16,8 +16,6 @@ def submit_data():
         data = request.get_json()
         prompt = data.get('prompt', '')
         
-
-        
         # Make a request to the OpenAI API
         print("Making API call...")
         completion = openaiClient.chat.completions.create(

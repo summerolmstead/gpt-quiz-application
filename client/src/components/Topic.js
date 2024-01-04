@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
-const Topic = () => {
-    const [message, setMessage] = useState("");
-    const [resp, setResp] = useState("");
+const Topic = ({ topic, setTopic, setResp }) => {
 
     async function getResult(event) {
         event.preventDefault();
@@ -13,7 +11,7 @@ const Topic = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ prompt: message }),
+                body: JSON.stringify({ prompt: topic }),
             });
 
             const result = await response.json();
@@ -29,24 +27,20 @@ const Topic = () => {
     }
 
     return (
-        <>
+        <div className="topic">
+            <div className="topic-tag">Topic:</div>
+
             <form onSubmit={getResult}>
-                <textarea
-                    className="chatbox"
+                <input
+                    className="topic-box"
                     type="text"
                     onChange={(e) => {
-                        setMessage(e.target.value);
+                        setTopic(e.target.value);
                     }}
-                ></textarea>
-                <button className="submit-button" type="submit">Submit</button>
+                ></input>
+                <button className="submit-button" type="submit">&#10140;</button>
             </form>
-            <div className="respbox">{resp && (
-                <div>
-                    <p>Response:</p>
-                    <p>{resp}</p>
-                </div>
-            )}</div>
-        </>
+        </div>
     );
 };
 
