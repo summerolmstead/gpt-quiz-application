@@ -1,6 +1,6 @@
 import React from "react";
 
-const Topic = ({ topic, setTopic, setQuiz, setFeedback }) => {
+const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
 
     async function getResult(event) {
         event.preventDefault();
@@ -11,7 +11,7 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback }) => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ prompt: topic }),
+                body: JSON.stringify({ prompt: topic, prev_questions: prevQ }),
             });
 
             const result = await response.json();
@@ -30,6 +30,11 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback }) => {
                     correct_answer: q.correct_answer,
                 }
                 setQuiz(quiz);
+                
+                var newPrevQ = prevQ;
+                newPrevQ.push(q.question);
+                setPrevQ(newPrevQ);
+                // setFeedback(newPrevQ.toString());
             } else {
                 alert("Server error: " + result.message);
             }

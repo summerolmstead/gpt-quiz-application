@@ -6,7 +6,7 @@ import Feedback from "./Feedback";
 
 const Quiz = () => {
     const [topic, setTopic] = useState("");
-    // const [prevQ, setPrevQ] = useState([]);
+    const [prevQ, setPrevQ] = useState([]);
     const [quiz, setQuiz] = useState({
         active: false,
         question: null,
@@ -22,7 +22,7 @@ const Quiz = () => {
     
     return (
         <div>
-            <Topic topic={topic} setTopic={setTopic} setQuiz={setQuiz} setFeedback={setFeedback} />
+            <Topic topic={topic} setTopic={setTopic} setQuiz={setQuiz} setFeedback={setFeedback} prevQ={prevQ} setPrevQ={setPrevQ} />
             <QandA quiz={quiz} setQuiz={setQuiz} setFeedback={setFeedback} />
             <Feedback feedback={feedback} />
         </div>

@@ -5,23 +5,24 @@ import AnswerBox from "./AnswerBox";
 const QandA = ({ quiz, setQuiz, setFeedback }) => {
     
     function checkAnswer(number) {
-        setFeedback(" " * number)
+        console.log("Checking answer: " + number);
+        // setFeedback(" " * number)
         if (quiz.active) {
-            if (number === quiz.correct_answer) {
-                quiz.answers[number-1].status = "correct";
-                quiz.answers.forEach(ans => {
-                    if (ans.status === "pending") {
+            const updatedQuiz = { ...quiz };
+            
+            if (number === updatedQuiz.correct_answer) {
+                updatedQuiz.answers[number-1].status = "correct";
+                updatedQuiz.answers.forEach((ans, index) => {
+                    if (ans.status === "pending" && index !== number - 1) {
                         ans.status = "disabled";
                     }
                 });
-                quiz.active = false;
-                setQuiz(quiz);
-            } else if (number !== quiz.correct_answer) {
-                quiz.answers[number-1].status = "incorrect";
-                setQuiz(quiz);
+                updatedQuiz.active = false;
+            } else {
+                updatedQuiz.answers[number-1].status = "incorrect";
             }
+            setQuiz(updatedQuiz);
         }
-        // setQuiz(quiz);
     }
 
     return (
