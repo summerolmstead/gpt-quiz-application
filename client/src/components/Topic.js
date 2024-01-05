@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
+    const [enabled, setEnabled] = useState(true);
 
     async function getResult(event) {
         event.preventDefault();
+        
+        if (!enabled) {
+            return false;
+        }
+        
+        setEnabled(false);
 
         try {
             const response = await fetch("http://127.0.0.1:5000/api/submit", {
@@ -41,6 +48,8 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
         } catch (error) {
             alert("Error submitting prompt: " + error);
         }
+        
+        setEnabled(true);
     }
 
     return (
@@ -55,7 +64,7 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
                         setTopic(e.target.value);
                     }}
                 ></input>
-                <button className="form-button enter" type="submit">&#10140;</button>
+                <button className={`form-button enter${enabled ? "" : " disabled"}`} type="submit">&#10140;</button>
             </form>
         </div>
     );

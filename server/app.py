@@ -10,6 +10,7 @@ CORS(app)
 
 # Set your OpenAI API key
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+gpt_model = "gpt-3.5-turbo-1106"
 
 @app.route('/api/submit', methods=['POST'])
 def submit_data():
@@ -21,20 +22,19 @@ def submit_data():
         if len(prev_questions) > 10:
             prev_questions = prev_questions[len(prev_questions) - 10:]
         
-        # Make a request to the OpenAI API
-        print("Making API call...")
-        
         pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create a hard, in-depth question related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with each answer key labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
+        
         if prev_questions:
             prev_prompt = "The following questions might or might not relate to the topic, however they have been asked before. Don't use these.\n"
             for i in range(len(prev_questions)):
                 prev_prompt += f"Question {i+1}: {prev_questions[i]}\n"
             prev_prompt += "\nTopic: "
-            content = pre_prompt + prev_prompt + topic
         else:
-            content = pre_prompt + "Topic: " + topic
+            prev_prompt = "Topic: "
 
-        print(f"Previous question count: {len(prev_questions)}")
+        content = pre_prompt + prev_prompt + topic
+
+        print(f"\nCalling OpenAI API\n| Model: {gpt_model}\n| Prev Qs: {len(prev_questions)}\n| Topic: '{topic}'\n")
 
         completion = openaiClient.chat.completions.create(
             messages=[
@@ -43,7 +43,7 @@ def submit_data():
                     "content": content,
                 }
             ],
-            model="gpt-3.5-turbo-1106",
+            model=gpt_model,
             response_format={ "type": "json_object" }
         )
 
@@ -66,6 +66,8 @@ def submit_data():
                     'correct_answer': correct_answer
                 }
             }
+            print(f"\nAPI Response\n| Question: {question}\n| A1: {a1}\n| A2: {a2}\n| A3: {a3}\n| A4: {a4}\n| Correct Answer: {correct_answer}\n")
+
             return jsonify(result)
         except Exception as e:
             result = {'status': 'error', 'message': str(e)}

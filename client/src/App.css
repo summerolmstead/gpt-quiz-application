@@ -101,11 +101,23 @@ form {
     border-radius: 10px;
     padding: none;
     margin-left: 15px;
-    background-color: var(--secondary);
 }
 
 .form-button.enter {
     font-size: 25px;
+    cursor: pointer;
+    background-color: var(--accent);
+    transition: background-color 0.2s;
+}
+
+.form-button.enter.disabled {
+    background-color: var(--secondary);
+}
+
+.form-button.enter.disabled:focus,
+.form-button.enter.disabled:hover {
+    outline: none;
+    cursor: default;
 }
 
 .form-button.redo {
@@ -156,16 +168,19 @@ form {
 .answer.incorrect {
     background-color: var(--secondary);
     border: 2px solid var(--text);
+    cursor: default;
 }
 
 .answer.correct {
     background-color: var(--correct);
     border: 2px solid var(--text);
+    cursor: default;
 }
 
 .answer.disabled {
     background-color: var(--primary);
     border: 2px solid var(--primary);
+    cursor: default;
 }
 
 .feedback-box {
