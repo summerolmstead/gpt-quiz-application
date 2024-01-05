@@ -20,8 +20,10 @@ body,
     --text: rgb(15, 15, 15);
     --background: rgb(244, 244, 244);
     --primary: rgb(219, 219, 219);
+    --highlight: rgb(175, 175, 175);
     --secondary: rgb(235, 135, 135);
     --accent: rgb(234, 79, 79);
+    --correct: rgb(175, 225, 187);
 
     --text-dark: rgb(240, 240, 240);
     --background-dark: rgb(0, 0, 0);
@@ -70,44 +72,102 @@ body,
 
 form {
     display: flex;
+    flex-grow: 1;
     height: 100%;
     flex-direction: row;
     align-items: center;
 }
 
 .topic-box,
-.submit-button {
+.form-button {
     box-sizing: border-box;
 }
 
 .topic-box {
     height: 100%;
-    width: 400px;
+    /* width: 100%; */
+    flex-grow: 1;
     border: none;
     border-radius: 10px;
     padding: 10px;
-    margin-right: 15px;
     background-color: var(--primary);
     font-size: 25px;
 }
 
-.submit-button {
+.form-button {
     height: 100%;
     width: 60px;
     border: none;
     border-radius: 10px;
     padding: none;
+    margin-left: 15px;
     background-color: var(--secondary);
+}
 
+.form-button.enter {
     font-size: 25px;
 }
 
+.form-button.redo {
+    font-size: 40px;
+}
+
 .topic-box:focus,
-.submit-button:focus,
-.submit-button:hover {
+.form-button:focus,
+.form-button:hover {
     outline: 2px solid black;
 }
 
 .question-box {
+    margin-top: 20px;
+}
+
+.question-container {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--primary);
+}
+
+.answer-container {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.answer {
+    flex: 1 1 calc(50% - 10px);
+    box-sizing: border-box;
+    border: 2px solid var(--highlight);
+    transition: border 0.2s, background-color 0.2s;
+    border-radius: 10px;
+    background-color: var(--background);
+    color: var(--text);
+    padding: 10px;
+    text-align: left;
+    font-size: 16px;
+}
+
+.answer:hover {
+    border: 2px solid var(--text);
+    cursor: pointer;
+}
+
+.answer.incorrect {
+    background-color: var(--secondary);
+    border: 2px solid var(--text);
+}
+
+.answer.correct {
+    background-color: var(--correct);
+    border: 2px solid var(--text);
+}
+
+.answer.disabled {
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.feedback-box {
     margin-top: 20px;
 }

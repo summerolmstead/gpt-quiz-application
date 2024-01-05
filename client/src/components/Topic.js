@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Topic = ({ topic, setTopic, setResp }) => {
+const Topic = ({ topic, setTopic, setQuiz, setFeedback }) => {
 
     async function getResult(event) {
         event.preventDefault();
@@ -17,12 +17,24 @@ const Topic = ({ topic, setTopic, setResp }) => {
             const result = await response.json();
 
             if (response.ok) {
-                setResp(result.message);
+                var q = result.content;
+                var quiz = {
+                    active: true,
+                    question: q.question,
+                    answers: [
+                        { answer: q.a1, value: 1, status: "pending" },
+                        { answer: q.a2, value: 2, status: "pending" },
+                        { answer: q.a3, value: 3, status: "pending" },
+                        { answer: q.a4, value: 4, status: "pending" },
+                    ],
+                    correct_answer: q.correct_answer,
+                }
+                setQuiz(quiz);
             } else {
-                setResp("Server error: " + result.message);
+                alert("Server error: " + result.message);
             }
         } catch (error) {
-            setResp("Error submitting prompt: " + error);
+            alert("Error submitting prompt: " + error);
         }
     }
 
@@ -38,7 +50,7 @@ const Topic = ({ topic, setTopic, setResp }) => {
                         setTopic(e.target.value);
                     }}
                 ></input>
-                <button className="submit-button" type="submit">&#10140;</button>
+                <button className="form-button enter" type="submit">&#10140;</button>
             </form>
         </div>
     );
