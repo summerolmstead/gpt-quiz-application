@@ -8,4 +8,4 @@ const Feedback = ({ feedback }) => {
     );
 }
 
-export default Feedback
+export default Feedback;
