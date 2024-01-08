@@ -41,7 +41,6 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
                 var newPrevQ = prevQ;
                 newPrevQ.push(q.question);
                 setPrevQ(newPrevQ);
-                // setFeedback(newPrevQ.toString());
             } else {
                 alert("Server error: " + result.message);
             }
