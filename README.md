@@ -1,10 +1,10 @@
 # Repo for development with OpenAI's GPT API.
 
-### Description
+## Description
 
 This project is a quiz generator that uses ChatGPT to create a specific quiz question about the topic provided by the user. It will return 4 potential answers, with one being the correct one. It is a work-in-progress, and it likely be used as a part of a larger project for learning generation using ChatGPT. More to be determined in the future.
 
-# Tools
+## Tools
 
 This project is build with [React](https://react.dev/), the [OpenAI framework](https://openai.com/blog/openai-api), and a [Flask backend](https://flask.palletsprojects.com/).
 
