@@ -19,14 +19,21 @@ const Quiz = () => {
         correct_answer: null,
     });
     const [feedback, setFeedback] = useState("");
-    
+
     return (
         <div>
-            <Topic topic={topic} setTopic={setTopic} setQuiz={setQuiz} setFeedback={setFeedback} prevQ={prevQ} setPrevQ={setPrevQ} />
+            <Topic
+                topic={topic}
+                setTopic={setTopic}
+                setQuiz={setQuiz}
+                setFeedback={setFeedback}
+                prevQ={prevQ}
+                setPrevQ={setPrevQ}
+            />
             <QandA quiz={quiz} setQuiz={setQuiz} setFeedback={setFeedback} />
             <Feedback feedback={feedback} />
         </div>
     );
-}
+};
 
 export default Quiz;

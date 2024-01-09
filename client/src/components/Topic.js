@@ -5,11 +5,11 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
 
     async function getResult(event) {
         event.preventDefault();
-        
+
         if (!enabled) {
             return false;
         }
-        
+
         setEnabled(false);
 
         try {
@@ -35,9 +35,9 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
                         { answer: q.a4, value: 4, status: "pending" },
                     ],
                     correct_answer: q.correct_answer,
-                }
+                };
                 setQuiz(quiz);
-                
+
                 var newPrevQ = prevQ;
                 newPrevQ.push(q.question);
                 setPrevQ(newPrevQ);
@@ -47,7 +47,7 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
         } catch (error) {
             alert("Error submitting prompt: " + error);
         }
-        
+
         setEnabled(true);
     }
 
@@ -63,7 +63,12 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
                         setTopic(e.target.value);
                     }}
                 ></input>
-                <button className={`form-button enter${enabled ? "" : " disabled"}`} type="submit">&#10140;</button>
+                <button
+                    className={`form-button enter${enabled ? "" : " disabled"}`}
+                    type="submit"
+                >
+                    &#10140;
+                </button>
             </form>
         </div>
     );
