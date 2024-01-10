@@ -6,7 +6,7 @@ const Header = () => {
             <div className="header-text">AI Quiz</div>
             <div className="sub-text">
                 by{" "}
-                <a href="https://majorschwartz.com/" target="_blank">
+                <a href="https://majorschwartz.com/" target="_blank" rel="noreferrer">
                     major schwartz <span className="direct-arrow">&#8599;</span>
                 </a>
             </div>
