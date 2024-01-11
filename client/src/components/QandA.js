@@ -5,7 +5,7 @@ import AnswerBox from "./AnswerBox";
 const QandA = ({ quiz, setQuiz, setFeedback }) => {
     function checkAnswer(number) {
         console.log("Checking answer: " + number);
-        // setFeedback(" " * number)
+        
         if (quiz.active) {
             const updatedQuiz = { ...quiz };
 
