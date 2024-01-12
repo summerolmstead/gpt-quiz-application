@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-# Set your OpenAI API key
+# Set your OpenAI API key in the .env
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 gpt_model = "gpt-3.5-turbo-1106"
 
@@ -48,6 +48,8 @@ def submit_data():
         )
 
         generated_text = completion.choices[0].message.content
+
+        # Implement a back-evaluation function for checking reponse correctness
 
         try:
             json_content = json.loads(generated_text)
