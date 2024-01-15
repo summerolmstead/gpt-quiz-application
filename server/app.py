@@ -50,6 +50,20 @@ def submit_data():
         generated_text = completion.choices[0].message.content
 
         # Implement a back-evaluation function for checking reponse correctness
+        eval_prompt = "You are a double checking machine. I will provide a question and an answer, and you will tell me if that is the correct answer for the question. Your response should be a JSON object with only one key called 'evaluation' and the value should be the integer 0 if it is not the correct answer or the integer 1 if it is the correct answer.\n\n"
+
+        eval_prompt += ""
+
+        eval_response = openaiClient.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": eval_prompt,
+                }
+            ],
+            model=gpt_model,
+            response_format={ "type": "json_object" }
+        )
 
         try:
             json_content = json.loads(generated_text)
