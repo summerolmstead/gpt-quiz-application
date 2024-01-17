@@ -12,6 +12,86 @@ CORS(app)
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 gpt_model = "gpt-3.5-turbo-1106"
 
+def prompt_gpt(topic, prev_questions):
+    pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create a hard, in-depth question related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
+        
+    if prev_questions:
+        prev_prompt = "Don't ever use these questions when generating the question:\n"
+        for i in range(len(prev_questions)):
+            prev_prompt += f"Question {i+1}: {prev_questions[i]}\n"
+        prev_prompt += "\nTopic: "
+    else:
+        prev_prompt = "Topic: "
+
+    content = pre_prompt + prev_prompt + topic
+
+    print(f"\nCalling OpenAI API\n| Model: {gpt_model}\n| Prev Qs: {len(prev_questions)}\n| Topic: '{topic}'\n")
+
+    completion = openaiClient.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": content,
+            }
+        ],
+        model=gpt_model,
+        response_format={ "type": "json_object" }
+    )
+
+    return completion.choices[0].message.content
+
+def check_gpt(generated_text, topic, prev_questions):
+    content = generated_text
+    try:
+        evaluated = False
+        while not evaluated:
+            try:
+                print("Starting evaluation.")
+
+                eval_prompt = "You are a double checking machine. I will provide a question and an answer, and you will tell me if that is the correct answer for the question. Your response should be a JSON object with only one key called 'evaluation' and the value should be the string '0' if it is not the correct answer or the string '1' if it is the correct answer.\n\n"
+
+                json_content = json.loads(content)
+
+                check_question = json_content['question']
+                check_answers = [json_content['a1'], json_content['a2'], json_content['a3'], json_content['a4']]
+                check_answer = check_answers[int(json_content['correct_answer'])-1]
+
+                eval_prompt += f"Question: {check_question}\nAnswer: {check_answer}"
+
+                print("Evaluation prompting.")
+                eval_response = openaiClient.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": eval_prompt,
+                        }
+                    ],
+                    model=gpt_model,
+                    response_format={ "type": "json_object" }
+                )
+                print("Finished evaluation prompting.")
+                # print(f"Raw eval data: {eval_response}")
+
+                eval_content = json.loads(eval_response.choices[0].message.content)
+
+                print(f"Evaluation content: \n{eval_content}")
+
+                if int(eval_content['evaluation']):
+                    print('Evaluation: Valid.')
+                    evaluated = True
+                else:
+                    print('Evaluation: Not valid.')
+                    print(f"Eval Q: {check_question}")
+                    print(f"Eval A: {check_answer}")
+                    content = prompt_gpt(topic, prev_questions)
+            except:
+                evaluated = True
+                print("Error occurred during evaluation.")
+    except:
+        return generated_text
+    
+    return generated_text
+
 @app.route('/api/submit', methods=['POST'])
 def submit_data():
     try:
@@ -22,48 +102,9 @@ def submit_data():
         if len(prev_questions) > 10:
             prev_questions = prev_questions[len(prev_questions) - 10:]
         
-        pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create a hard, in-depth question related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
-        
-        if prev_questions:
-            prev_prompt = "Don't ever use these questions when generating the question:\n"
-            for i in range(len(prev_questions)):
-                prev_prompt += f"Question {i+1}: {prev_questions[i]}\n"
-            prev_prompt += "\nTopic: "
-        else:
-            prev_prompt = "Topic: "
+        generated_text = prompt_gpt(topic, prev_questions)
 
-        content = pre_prompt + prev_prompt + topic
-
-        print(f"\nCalling OpenAI API\n| Model: {gpt_model}\n| Prev Qs: {len(prev_questions)}\n| Topic: '{topic}'\n")
-
-        completion = openaiClient.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": content,
-                }
-            ],
-            model=gpt_model,
-            response_format={ "type": "json_object" }
-        )
-
-        generated_text = completion.choices[0].message.content
-
-        # Implement a back-evaluation function for checking reponse correctness
-        eval_prompt = "You are a double checking machine. I will provide a question and an answer, and you will tell me if that is the correct answer for the question. Your response should be a JSON object with only one key called 'evaluation' and the value should be the integer 0 if it is not the correct answer or the integer 1 if it is the correct answer.\n\n"
-
-        eval_prompt += ""
-
-        eval_response = openaiClient.chat.completions.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": eval_prompt,
-                }
-            ],
-            model=gpt_model,
-            response_format={ "type": "json_object" }
-        )
+        generated_text = check_gpt(generated_text, topic, prev_questions)
 
         try:
             json_content = json.loads(generated_text)
