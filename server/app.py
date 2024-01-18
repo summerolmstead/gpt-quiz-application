@@ -10,7 +10,12 @@ CORS(app)
 
 # Set your OpenAI API key in the .env
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-gpt_model = "gpt-3.5-turbo-1106"
+
+available_models = ['gpt-3.5-turbo',
+                    'gpt-3.5-turbo-1106',
+                    'gpt-4',
+                    'gpt-4-1106-preview']
+gpt_model = available_models[3]
 
 def prompt_gpt(topic, prev_questions):
     pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create a hard, in-depth question related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
@@ -44,7 +49,8 @@ def check_gpt(generated_text, topic, prev_questions):
     content = generated_text
     try:
         evaluated = False
-        while not evaluated:
+        attempts = 0
+        while not evaluated and attempts < 5:
             try:
                 print("Starting evaluation.")
 
@@ -66,7 +72,7 @@ def check_gpt(generated_text, topic, prev_questions):
                             "content": eval_prompt,
                         }
                     ],
-                    model=gpt_model,
+                    model=available_models[1],
                     response_format={ "type": "json_object" }
                 )
                 print("Finished evaluation prompting.")
@@ -74,23 +80,25 @@ def check_gpt(generated_text, topic, prev_questions):
 
                 eval_content = json.loads(eval_response.choices[0].message.content)
 
-                print(f"Evaluation content: \n{eval_content}")
+                # print(f"| Evaluation content: \n{eval_content}")
 
+                print(f"| Eval Q: {check_question}")
+                print(f"| Eval A: {check_answer}")
+                
                 if int(eval_content['evaluation']):
-                    print('Evaluation: Valid.')
+                    print('| Evaluation: Valid.')
                     evaluated = True
                 else:
-                    print('Evaluation: Not valid.')
-                    print(f"Eval Q: {check_question}")
-                    print(f"Eval A: {check_answer}")
+                    print('| Evaluation: Not valid.')
+                    attempts += 1
                     content = prompt_gpt(topic, prev_questions)
             except:
                 evaluated = True
                 print("Error occurred during evaluation.")
     except:
-        return generated_text
+        return content
     
-    return generated_text
+    return content
 
 @app.route('/api/submit', methods=['POST'])
 def submit_data():
