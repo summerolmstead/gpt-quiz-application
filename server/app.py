@@ -15,10 +15,10 @@ available_models = ['gpt-3.5-turbo',
                     'gpt-3.5-turbo-1106',
                     'gpt-4',
                     'gpt-4-1106-preview']
-gpt_model = available_models[3]
+gpt_model = available_models[1]
 
 def prompt_gpt(topic, prev_questions):
-    pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create a hard, in-depth question related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
+    pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create an extremely super duper hard, in-depth, practically impossible question that's super obscure related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
         
     if prev_questions:
         prev_prompt = "Don't ever use these questions when generating the question:\n"
@@ -72,7 +72,7 @@ def check_gpt(generated_text, topic, prev_questions):
                             "content": eval_prompt,
                         }
                     ],
-                    model=available_models[1],
+                    model=available_models[3],
                     response_format={ "type": "json_object" }
                 )
                 print("Finished evaluation prompting.")
