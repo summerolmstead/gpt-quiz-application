@@ -53,6 +53,7 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
 
     return (
         <div className="topic">
+            {/* Make new section for past answer review */}
             <div className="topic-tag">Topic:</div>
 
             <form onSubmit={getResult}>
