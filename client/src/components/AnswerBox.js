@@ -4,7 +4,6 @@ const AnswerBox = ({ text, status, number, onSelect }) => {
     return (
         <button onClick={() => onSelect(number)} className={`answer ${status}`}>
             {text}
-            {/* Yessir */}
         </button>
     );
 };
