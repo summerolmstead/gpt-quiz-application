@@ -40,6 +40,7 @@ def prompt_gpt(topic, prev_questions):
             }
         ],
         model=gpt_model,
+        # Determine valid GPT instances
         response_format={ "type": "json_object" }
     )
 
