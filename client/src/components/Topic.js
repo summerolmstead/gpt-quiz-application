@@ -54,7 +54,7 @@ const Topic = ({ topic, setTopic, setQuiz, setFeedback, prevQ, setPrevQ }) => {
     return (
         <div className="topic">
             {/* Make new section for past answer review */}
-            {/* Add a model dropdown */}
+            {/* Add a model dropdown pt2 */}
             <div className="topic-tag">Topic:</div>
 
             <form onSubmit={getResult}>
