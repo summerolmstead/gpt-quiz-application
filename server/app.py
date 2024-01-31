@@ -81,8 +81,6 @@ def check_gpt(generated_text, topic, prev_questions):
 
                 eval_content = json.loads(eval_response.choices[0].message.content)
 
-                # print(f"| Evaluation content: \n{eval_content}")
-
                 print(f"| Eval Q: {check_question}")
                 print(f"| Eval A: {check_answer}")
                 
