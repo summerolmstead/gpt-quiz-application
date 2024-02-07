@@ -77,7 +77,6 @@ def check_gpt(generated_text, topic, prev_questions):
                     response_format={ "type": "json_object" }
                 )
                 print("Finished evaluation prompting.")
-                # print(f"Raw eval data: {eval_response}")
 
                 eval_content = json.loads(eval_response.choices[0].message.content)
 
