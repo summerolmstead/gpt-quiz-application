@@ -10,7 +10,6 @@ function App() {
             <Header />
             <div className="main">
                 <Quiz />
-                {/* Components listed here. */}
             </div>
         </div>
     );
