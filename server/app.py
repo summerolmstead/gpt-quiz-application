@@ -44,6 +44,7 @@ def prompt_gpt(topic, prev_questions):
         response_format={ "type": "json_object" }
     )
 
+    print(completion.choices[0].message.content)
     return completion.choices[0].message.content
 
 def check_gpt(generated_text, topic, prev_questions):
