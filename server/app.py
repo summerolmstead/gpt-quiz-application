@@ -1,12 +1,14 @@
 import time
 from flask import Flask, request, jsonify
-from flask_cors import CORS
+# from flask_cors import CORS
+from flask_cors import cross_origin
 from openai import OpenAI
 import json
 import os
+from pymongo import MongoClient
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
 
 # Set your OpenAI API key in the .env
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -19,7 +21,7 @@ gpt_model = available_models[1]
 
 def prompt_gpt(topic, prev_questions):
     pre_prompt = "You are a quiz bot. You will receive a topic and your task is to create an extremely super duper hard, in-depth, practically impossible question that's super obscure related to the topic and four possible answers for the user. Don't make the question about the definition of the topic. Avoid questions that are more than 100 words long. Only one answer should be correct and the other three should be wrong. Return a JSON object with the question key labeled as 'question', with the keys for answers 1 through 4 labeled 'a1', 'a2', 'a3', and 'a4' respectively, and the correct answer key labeled as 'correct_answer' with the value either being 1, 2, 3, or 4. Avoid questions that are more than 100 words long and answers that are more than 10 words long. Make the wrong answers related to the correct answer to try to trick the guesser.\n\n"
-        
+    
     if prev_questions:
         prev_prompt = "Don't ever use these questions when generating the question:\n"
         for i in range(len(prev_questions)):
@@ -139,6 +141,25 @@ def submit_data():
     except Exception as e:
         result = {'status': 'error', 'message': str(e)}
         return jsonify(result), 500
+
+mongo_uri = "mongodb+srv://majorpsmail:fpCjEnFD0SJNWje6@quizdb.lwbgbmc.mongodb.net/?retryWrites=true&w=majority&appName=quizdb"
+database_name = "quizdb"
+collection_name = "test_collection"
+
+@app.route('/getQuestion1', methods=['GET'])
+@cross_origin
+def get_question1():
+    print("Recieved call")
+    client = MongoClient(mongo_uri)
+    db = client[database_name]
+    collection = db[collection_name]
+    question = collection.find_one({}, {"question1": 1, "_id": '65d7e100125a6244d1c9e389'})
+    client.close()
+
+    if question:
+        return jsonify(question), 200
+    else:
+        return jsonify({"error": "Question not found"}), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
