@@ -1,0 +1,9 @@
+- Setup a database to maintain user information
+- Provide a clearer interface (examples of topics)
+- save questions you like either into a "like" bucket or specific folders
+- "recommend similar questions" button, also a "not recommend" or "remember for later"
+- review section that includes questions that they got wrong
+- sidebar with question history
+- streaks!
+- possible: provide notes section for specific question generation
+- competition between people quizzing on the same topic at the same time (people currently studying shows compete button to begin a competition with)
