@@ -9,8 +9,7 @@ const Feedback = ({ feedback }) => {
             method: 'GET',
             credentials: 'include', // Include cookies for cross-origin requests
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Content-Type': 'application/json'
                 // Additional headers can go here as needed
             },
         })
