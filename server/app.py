@@ -147,6 +147,7 @@ database_name = "quizdb"
 collection_name = "test_collection"
 
 @app.route('/getQuestion1', methods=['GET'])
+# Debug the cross origin request
 @cross_origin
 def get_question1():
     print("Recieved call")
