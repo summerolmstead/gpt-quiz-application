@@ -4,6 +4,7 @@ const Feedback = ({ feedback }) => {
     const [question, setQuestion] = useState('');
 
     useEffect(() => {
+        // Fetch the question from the server
         fetch('http://localhost:5000/getQuestion1',
         {
             method: 'GET',
@@ -15,6 +16,7 @@ const Feedback = ({ feedback }) => {
         })
             .then(response => response.json())
             .then(data => {
+                // Set the question state to the question from the server
                 if(data.question1) {
                     setQuestion(data.question1);
                 } else {
