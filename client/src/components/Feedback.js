@@ -5,14 +5,9 @@ const Feedback = ({ feedback }) => {
 
     useEffect(() => {
         // Fetch the question from the server
-        fetch('http://localhost:5000/getQuestion1',
+        fetch('http://127.0.0.1:5000/getQuestion1',
         {
             method: 'GET',
-            credentials: 'include', // Include cookies for cross-origin requests
-            headers: {
-                'Content-Type': 'application/json'
-                // Additional headers can go here as needed
-            },
         })
             .then(response => response.json())
             .then(data => {

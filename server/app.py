@@ -1,6 +1,6 @@
 import time
 from flask import Flask, request, jsonify
-# from flask_cors import CORS
+from flask_cors import CORS
 from flask_cors import cross_origin
 from openai import OpenAI
 import json
@@ -8,7 +8,7 @@ import os
 from pymongo import MongoClient
 
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 
 # Set your OpenAI API key in the .env
 openaiClient = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
@@ -147,8 +147,6 @@ database_name = "quizdb"
 collection_name = "test_collection"
 
 @app.route('/getQuestion1', methods=['GET'])
-# Debug the cross origin request
-@cross_origin
 def get_question1():
     print("Recieved call")
     client = MongoClient(mongo_uri)
