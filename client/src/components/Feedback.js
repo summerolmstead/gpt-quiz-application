@@ -5,7 +5,7 @@ const Feedback = ({ feedback }) => {
 
     useEffect(() => {
         // Fetch the question from the server
-        fetch('http://127.0.0.1:5000/getQuestion1',
+        fetch('http://127.0.0.1:5000/api/getQuestion1',
         {
             method: 'GET',
         })

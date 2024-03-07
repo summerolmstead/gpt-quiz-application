@@ -146,7 +146,7 @@ mongo_uri = "mongodb+srv://majorpsmail:fpCjEnFD0SJNWje6@quizdb.lwbgbmc.mongodb.n
 database_name = "quizdb"
 collection_name = "test_collection"
 
-@app.route('/getQuestion1', methods=['GET'])
+@app.route('/api/getQuestion1', methods=['GET'])
 def get_question1():
     print("Recieved call")
     client = MongoClient(mongo_uri)
@@ -156,6 +156,7 @@ def get_question1():
     client.close()
 
     if question:
+        print(question)
         return jsonify(question), 200
     else:
         return jsonify({"error": "Question not found"}), 404
