@@ -142,7 +142,7 @@ def submit_data():
         result = {'status': 'error', 'message': str(e)}
         return jsonify(result), 500
 
-mongo_uri = "mongodb+srv://majorpsmail:fpCjEnFD0SJNWje6@quizdb.lwbgbmc.mongodb.net/?retryWrites=true&w=majority&appName=quizdb"
+mongo_uri = os.getenv("MONGO_URI")
 database_name = "quizdb"
 collection_name = "test_collection"
 
