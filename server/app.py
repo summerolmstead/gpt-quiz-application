@@ -146,6 +146,7 @@ mongo_uri = os.getenv("MONGO_URI")
 database_name = "quizdb"
 collection_name = "test_collection"
 
+# Instead get all previous questions from the database
 @app.route('/api/getQuestion1', methods=['GET'])
 def get_question1():
     print("Recieved call")
