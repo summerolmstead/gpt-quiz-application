@@ -143,17 +143,19 @@ def submit_data():
         return jsonify(result), 500
 
 mongo_uri = os.getenv("MONGO_URI")
-database_name = "quizdb"
-collection_name = "test_collection"
+database_name = "quizdata"
+collection_name = "testcollection"
 
 # Instead get all previous questions from the database
 @app.route('/api/getQuestion1', methods=['GET'])
 def get_question1():
     print("Recieved call")
     client = MongoClient(mongo_uri)
+    print(mongo_uri)
     db = client[database_name]
     collection = db[collection_name]
-    question = collection.find_one({}, {"question1": 1, "_id": '65d7e100125a6244d1c9e389'})
+    question = collection.find_one({"Key1": "question"})
+    question = question["question"]
     client.close()
 
     if question:

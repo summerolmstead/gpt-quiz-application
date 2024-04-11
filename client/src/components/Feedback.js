@@ -12,8 +12,8 @@ const Feedback = ({ feedback }) => {
             .then(response => response.json())
             .then(data => {
                 // Set the question state to the question from the server
-                if(data.question1) {
-                    setQuestion(data.question1);
+                if(data) {
+                    setQuestion(data);
                 } else {
                     console.error('Question not found');
                 }
